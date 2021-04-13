@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 
-class UserController extends Controller
+class AuthController extends Controller
 {
 
     function login(Request $request) {
@@ -22,12 +22,13 @@ class UserController extends Controller
         try {
             $user = User::where('email',$email)->firstOrFail();
         }catch(ModelNotFoundException $e) {
-            return back()->withErrors(["email" => "No hay nadie registrado con ese email"]);
+            return back()->withInput($request->input())->withErrors(["email" => "No hay nadie registrado con ese email"]);
         }
         if(!(hash("sha256",$password) === $user->password))
-            return back()->withErrors(["password" => "El password no concuerda con nuestros registros"]);
+            return back()->withInput($request->input())->withErrors(["password" => "El password no concuerda con nuestros registros"]);
         Auth::login($user);
-        return view("home");
+        //return view("home");
+        return redirect()->route('home');
     }
 
     function logout(Request $request) {
