@@ -28,6 +28,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => hash("sha256","123456"), // password
             'remember_token' => Str::random(10),
+            'rol_id' => random_int(2,3)
         ];
     }
 
